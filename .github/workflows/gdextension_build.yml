@@ -104,10 +104,6 @@ jobs:
     name: "${{matrix.platform_name}}: ${{matrix.arch}}, ${{matrix.target}}"
     runs-on: ${{matrix.runner-os}}
     environment: ${{inputs.production_build == true && 'production' || ''}}
-    env:
-      TELEMETRY_DD3D_APP_ID: ${{secrets.TELEMETRY_DD3D_APP_ID}}
-      TELEMETRY_DD3D_HOST: ${{secrets.TELEMETRY_DD3D_HOST}}
-      TELEMETRY_DST_FILE_KEY: ${{secrets.TELEMETRY_DST_FILE_KEY}}
 
     strategy:
       fail-fast: false
@@ -289,10 +285,6 @@ jobs:
     name: "2️⃣ Double: ${{matrix.runner-os}}, ${{matrix.platform}}"
     runs-on: ${{matrix.runner-os}}
     environment: ${{inputs.production_build == true && 'production' || ''}}
-    env:
-      TELEMETRY_DD3D_APP_ID: ${{secrets.TELEMETRY_DD3D_APP_ID}}
-      TELEMETRY_DD3D_HOST: ${{secrets.TELEMETRY_DD3D_HOST}}
-      TELEMETRY_DST_FILE_KEY: ${{secrets.TELEMETRY_DST_FILE_KEY}}
 
     strategy:
       fail-fast: false

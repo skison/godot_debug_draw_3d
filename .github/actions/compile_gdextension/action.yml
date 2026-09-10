@@ -32,9 +32,6 @@ inputs:
   use_cache:
     description: Use cache
     default: "true"
-  telemetry_version:
-    description: Telemetry version
-    default: 153bdd6e06870581968c11c4790eece04dc2bd22
 runs:
   using: composite
   steps:
@@ -43,16 +40,6 @@ runs:
       id: get_godot_cpp_sha
       run: |
         echo "sha=$(git rev-parse @:./godot-cpp)" >> $GITHUB_OUTPUT
-
-    - name: Checkout telemetry repo
-      uses: actions/checkout@v6
-      id: checkout_tele_repo
-      if: ${{env.PRODUCTION_BUILD == 'true' && contains(fromJSON('["template_debug", "editor"]'), inputs.target) && contains(fromJSON('["linux", "macos", "windows"]'), inputs.platform)}}
-      continue-on-error: true
-      with:
-        repository: ${{github.repository_owner}}/dst_modules
-        ref: ${{inputs.telemetry_version}}
-        path: src/editor/dst_modules
 
     - name: Restore .scons_cache directory
       if: inputs.use_cache != 'false'
@@ -116,13 +103,9 @@ runs:
           scons_mingw_args='use_mingw=yes use_llvm=yes mingw_prefix="${{steps.setup_mingw.outputs.mingw_folder}}"'
         fi
 
-        telemetry_args=""
-        if [[ "${{env.PRODUCTION_BUILD}}" == "true" && " editor " == *" ${{inputs.target}} "* && " linux macos windows " == *" ${{inputs.platform}} "* && "${{steps.checkout_tele_repo.conclusion}}" == "success" ]]; then
-          telemetry_args="telemetry_enabled=yes"
-        fi
         scons_params="platform=${{inputs.platform}} arch=${{inputs.arch}} optimize=speed target=${{inputs.target}} addon_output_dir=${{inputs.output_libs_path}} ${{inputs.additional}} $scons_mingw_args"
 
-        run_scons $scons_params $telemetry_args
+        run_scons $scons_params
 
         if [ "${{inputs.target}}" == "template_release" ] && [ "${{inputs.build_forced_dd3d}}" == "true" ]; then
           echo "============================================="

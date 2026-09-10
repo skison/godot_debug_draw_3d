@@ -19,11 +19,6 @@ GODOT_WARNING_DISABLE()
 #include <godot_cpp/classes/editor_plugin.hpp>
 GODOT_WARNING_RESTORE()
 
-#ifdef TELEMETRY_ENABLED
-#include "editor/dst_modules/GDExtension/usage_time_reporter.h"
-DEFINE_TELEMETRY_OBJECT_ID(dd3d_usage_obj_id);
-#endif
-
 #include "editor/editor_menu_extensions.h"
 
 #include "editor/asset_library_update_checker.h"
@@ -71,10 +66,6 @@ void initialize_debug_draw_3d_module(ModuleInitializationLevel p_level) {
 
 		ClassDB::register_internal_class<_DebugDraw3DAssetLibraryUpdateChecker>();
 		upd_checker.instantiate();
-
-#ifdef TELEMETRY_ENABLED
-		INIT_EDITOR_TELEMETRY_OBJECT(dd3d_usage_obj_id, "Debug Draw 3D", TELEMETRY_APP_ID, DD3D_VERSION_STR, Utils::root_settings_section, TELEMETRY_HOST, "telemetry_dd3d.json");
-#endif
 	}
 #endif
 #endif
@@ -101,10 +92,6 @@ void uninitialize_debug_draw_3d_module(ModuleInitializationLevel p_level) {
 	if (p_level == MODULE_INITIALIZATION_LEVEL_EDITOR) {
 		upd_checker.unref();
 		// EditorPlugins::remove_by_type<DebugDrawMenuExtensionPlugin>();
-
-#ifdef TELEMETRY_ENABLED
-		DELETE_EDITOR_TELEMETRY_OBJECT(dd3d_usage_obj_id);
-#endif
 	}
 #endif
 #endif

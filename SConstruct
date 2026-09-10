@@ -58,7 +58,6 @@ def setup_options(env: SConsEnvironment, arguments):
     opts.Add(BoolVariable("cpp_api_tests", "Build only cpp api tests", False))
     opts.Add(BoolVariable("cpp_api_auto_gen", "Auto-generate native API files for a test project", True))
 
-    opts.Add(BoolVariable("telemetry_enabled", "Enable the telemetry module", False))
     opts.Add(BoolVariable("tracy_enabled", "Enable tracy profiler", False))
     opts.Add(BoolVariable("force_enabled_dd3d", "Keep the rendering code in the release build", False))
     opts.Add(
@@ -86,25 +85,6 @@ def setup_defines_and_flags(env: SConsEnvironment, src_out: list):
 
     if "release" in env["target"] and not env["force_enabled_dd3d"]:
         env.Append(CPPDEFINES=["DISABLE_DEBUG_RENDERING"])
-
-    if env["telemetry_enabled"]:
-        tele_src = "editor/dst_modules/GDExtension/usage_time_reporter.cpp"
-        if os.path.exists(os.path.join(src_folder, tele_src)):
-            env.Append(
-                CPPDEFINES=[
-                    "TELEMETRY_ENABLED",
-                    "UsageTimeReporterGodotObj=_UsageTimeReporterGodotObjDD3D",
-                    'TELEMETRY_DST_FILE_KEY=\\"' + os.environ.get("TELEMETRY_DST_FILE_KEY", '\\"') + '\\"',
-                    'TELEMETRY_APP_ID=\\"' + os.environ.get("TELEMETRY_DD3D_APP_ID", '\\"') + '\\"',
-                    'TELEMETRY_HOST=\\"' + os.environ.get("TELEMETRY_DD3D_HOST", '\\"') + '\\"',
-                ]
-            )
-            src_out.append(tele_src)
-            print("Compiling with telemetry support!")
-            print()
-        else:
-            print("No telemetry source file found.")
-            env.Exit(1)
 
     if env["platform"] == "windows":
         if env.get("use_mingw", False):
