@@ -1,23 +1,23 @@
 name: 🚀 Deploy content to Github Pages
 on:
-  push:
-    branches-ignore: [gh-pages]
-    # Must not overlap with conditions in `gdextension_build.yml`
-    paths:
-      [
-        docs/**,
-        images/**,
-        dd3d_web_build/**,
-        examples_dd3d/**,
-        Doxyfile,
-        src/**,
-        .github/**,
-        "!.github/**/util_*",
-        "patches/**",
-        lib_utils.py,
-        SConstruct,
-      ]
-  workflow_call:
+  # push:
+  #   branches-ignore: [gh-pages]
+  #   # Must not overlap with conditions in `gdextension_build.yml`
+  #   paths:
+  #     [
+  #       docs/**,
+  #       images/**,
+  #       dd3d_web_build/**,
+  #       examples_dd3d/**,
+  #       Doxyfile,
+  #       src/**,
+  #       .github/**,
+  #       "!.github/**/util_*",
+  #       "patches/**",
+  #       lib_utils.py,
+  #       SConstruct,
+  #     ]
+  # workflow_call:
   workflow_dispatch:
     inputs:
       production_build:
